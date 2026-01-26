@@ -146,7 +146,7 @@ Este projeto será licenciado sob licença MIT. Veja `LICENSE` para detalhes.
 
 ## 🔗 Conecte-se
 
-[LinkedIn](linkedin.com/in/samyrtertuliano/) - Veja meu perfil profissional
+[LinkedIn](https://linkedin.com/in/samyrtertuliano/) - Veja meu perfil profissional
 
 ---
 
