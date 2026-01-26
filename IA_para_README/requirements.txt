@@ -1,0 +1,9 @@
+#DEPEDÊNCIAS QUE PRECISAM SER INSTALADAS
+
+pytest
+selenium
+webdriver-manager
+eyes-selenium
+flask
+PyJWT
+google-genai
