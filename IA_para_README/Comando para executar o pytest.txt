@@ -1,3 +1,0 @@
-C:\Users\samyr\OneDrive\Documentos\Projetos Programação\IA_Readme\IA_para_QA\material-curso-ai\assistente-complexo\venv\Scripts\Activate.ps1
-
-..\venv\Scripts\Activate.ps1  

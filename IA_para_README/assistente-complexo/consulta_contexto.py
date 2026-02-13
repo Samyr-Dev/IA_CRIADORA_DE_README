@@ -1,71 +1,85 @@
-# query_with_context.py
-# -------------------------------------------------------------------
-# Lê uploaded_files.json, usa TODOS os arquivos como contexto em cada
-# chamada ao modelo, permite adicionar contexto-texto, e o prompt é
-# definido em variável. Opcional: rodar múltiplas "personas".
-# -------------------------------------------------------------------
+import time
+import os
+import json
 from google import genai
 from google.genai import types
-import json
 
-# ============== CONFIG ==================
-GEMINI_API_KEY = "AIzaSyDJanSfL6E6dqcdp0MSP5Vxd-EEHgsZn14"  # Insira sua chave da API aqui
-MODEL = "gemini-2.5-flash"
+# ============== CONFIG ==============
+GEMINI_API_KEY = "GERE_SEU_TOKEN_NO_SITE_DO_GEMINI_E_COLE_AQUI"
 UPLOADED_JSON = "uploaded_files.json"
-USE_CONTEXT_FILES = True  # Flag para controlar o envio de arquivos de contexto
+ARQUIVO_RESPOSTAS = "projeto.txt"
+ARQUIVO_FINAL = "README.md"
+MODEL = "gemini-3-flash-preview"
+# ====================================
 
-USER_INPUT = """
-Crie um Readme e uma descrição detalhada sobre o projeto que o usuário informar.
-Pergunte em qual linguagem de programação o usuário trabalhou no projeto, bem como foi feito o projeto. O Readme final deve ser entregue em formato de Markdown.
-"""
 
-# Contexto extra em TEXTO
-EXTRA_CONTEXT_TEXT = (
-    "Considere os documentos de apoio disponíveis para entender melhor o contexto e as necessidades do usuário.",
-    "O modelo serve como exemplo e pode ser adaptado para diferentes readme de acordo com o projeto.",
-)
-# ========================================
-
-def load_uploaded(json_path: str):
-    try:
-        data = json.loads(open(json_path, "r", encoding="utf-8").read())
-        if not isinstance(data, list) or not data:
-            raise ValueError("JSON não contém uma lista com metadados dos arquivos.")
-        return data
-    except Exception as e:
-        raise SystemExit(f"Falha ao ler {json_path}: {e}")
-
-def make_contents(user_input: str, uploaded_files: list):
-    parts = [types.Part(text=user_input)]
-    for meta in uploaded_files:
-        uri = meta.get("uri")
-        mime_type = meta.get("mime_type")
-        if uri and mime_type:
-            parts.append(types.Part(file_data=types.FileData(mime_type=mime_type, file_uri=uri)))
-    return parts
-
-def run_query(user_input):
+def run_query():
     client = genai.Client(api_key=GEMINI_API_KEY)
-    uploaded = []
-    if USE_CONTEXT_FILES:
-        try:
-            uploaded = load_uploaded(UPLOADED_JSON)
-        except SystemExit:
-            pass
-    sys_instr = EXTRA_CONTEXT_TEXT
-    contents = make_contents(user_input, uploaded)
+
+    # Inicializamos a variável com uma string vazia para evitar o erro de 'not associated with a value'
+    conteudo_usuario = ""
+
+    # Verifica se o arquivo existe e se tem conteúdo suficiente
+    ja_respondeu = os.path.exists(
+        ARQUIVO_RESPOSTAS) and os.path.getsize(ARQUIVO_RESPOSTAS) > 100
+
+    if not ja_respondeu:
+        print("📝 Gerando perguntas iniciais no projeto.txt...")
+        prompt = "Liste 8 perguntas essenciais para estruturar um README de GitHub profissional. Mande apenas as perguntas."
+        modo = "perguntas"
+    else:
+        print("📖 Lendo respostas e gerando o README final...")
+        with open(ARQUIVO_RESPOSTAS, "r", encoding="utf-8") as f:
+            conteudo_usuario = f.read()
+
+        # O prompt agora usa a variável definida com segurança
+        prompt = f"""
+        INSTRUÇÃO RESTRITA:
+        Crie o README.md baseando-se estritamente nestas informações fornecidas pelo usuário:
+        ---
+        {conteudo_usuario}
+        ---
+        REGRAS CRÍTICAS:
+        1. Se o usuário não forneceu uma informação, NÃO invente. Remova a seção.
+        2. NÃO use placeholders como '[descrever aqui]'.
+        3. LinkedIn: https://www.linkedin.com/in/samyrtertuliano
+        4. A LICENSE deve ser exibida na mesma posição e formato do exemplo, sem alterações. O conteúdo pode ser adaptado, mas a estrutura e posição deve ser mantida. Opções que podem ser seguidas: [![NPM](https://img.shields.io/npm/l/react)](https://github.com/Samyr-Dev/REPOSITÓRIO/blob/main/LICENSE) ou [![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+        5. As seções devem seguir a ordem do exemplo, mas podem ser omitidas se não houver informação suficiente. Exemplo de estrutura para dividir as seções do README e deixar mais legível:
+        ---
+        """
+        modo = "readme"
+
     try:
+        print(f"🚀 Enviando requisição para {MODEL}...")
+
+        # Se for modo readme, aplicamos um pequeno delay para evitar o erro 429
+        if modo == "readme":
+            time.sleep(5)
+
         resp = client.models.generate_content(
             model=MODEL,
-            contents=contents,
+            contents=prompt,
             config=types.GenerateContentConfig(
-                system_instruction=sys_instr,
-                thinking_config=types.ThinkingConfig(thinking_budget=0),
+                system_instruction="Você é um assistente que converte anotações em Markdown. Proibido usar placeholders.",
+                temperature=0.0,
             ),
         )
-        return (resp.text or "").strip() or "[sem texto]"
+
+        if resp.text:
+            if modo == "perguntas":
+                with open(ARQUIVO_RESPOSTAS, "w", encoding="utf-8") as f:
+                    f.write(resp.text)
+                return "✅ Perguntas salvas em 'projeto.txt'. Responda-as e execute novamente."
+            else:
+                with open(ARQUIVO_FINAL, "w", encoding="utf-8") as f:
+                    limpo = resp.text.replace(
+                        "```markdown", "").replace("```", "")
+                    f.write(limpo.strip())
+                return f"✅ README gerado com sucesso em {ARQUIVO_FINAL}!"
+
     except Exception as e:
-        return f"[ERRO] {e}"
+        return f"❌ Erro: {e}"
+
 
 if __name__ == "__main__":
-    print(run_query(USER_INPUT))
+    print(run_query())
