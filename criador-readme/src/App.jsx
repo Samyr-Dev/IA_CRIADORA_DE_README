@@ -85,7 +85,7 @@ export default function App() {
       setJaSincronizouGit(true);
       alert('✅ Dados do repositório GitHub integrados com sucesso!');
 
-    } catch (err) {
+    } catch (err) { // <- CORRIGIDO AQUI: De 'verify' para 'catch'
       console.error(err);
 
       if (jaSincronizouGit) {
