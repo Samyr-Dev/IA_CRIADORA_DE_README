@@ -1,0 +1,134 @@
+1. Testar o CRUD de um projeto cinema.
+2. CRUD dos módulos de cinema, filme, e outros.
+3. # Projeto Cinema - POO3 (P2)
+
+[![NestJS](https://img.shields.io/badge/Framework-NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![Prisma](https://img.shields.io/badge/ORM-Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
+Este projeto consiste no desenvolvimento e teste do ecossistema de uma API para gerenciamento de um sistema de cinema, abrangendo os módulos de Cinema, Filme, Sala, Sessão, Lanche-Combo, Ingresso e Pedido. O sistema utiliza arquitetura robusta com NestJS, persistência de dados com Prisma ORM e banco de dados SQLite otimizado via driver LibSQL.
+
+---
+
+## 🛠️ Tecnologias e Arquitetura
+* **Back-end:** NestJS (Node.js framework)
+* **Linguagem:** TypeScript
+* **Persistência (ORM):** Prisma 7 com Driver Adaptador Nativo (`@prisma/adapter-libsql`)
+* **Banco de Dados:** SQLite (`dev.db`)
+
+---
+
+## 🚀 Execução do Projeto
+
+### Instalação de Dependências
+```bash
+npm install
+Iniciar o Servidor de Desenvolvimento
+Bash
+npm run start:dev
+O servidor inicializará e estará escutando requisições na porta 3001: http://localhost:3001
+
+Visualizar o Banco de Dados (Prisma Studio)
+Devido à arquitetura modular com drivers customizados do Prisma 7, execute o Studio passando explicitamente o caminho do banco:
+
+Bash
+npx prisma studio --url file:./prisma/dev.db
+A interface gráfica abrirá no endereço: http://localhost:51212 ou http://localhost:5555
+
+🗺️ Ordem Correta dos Testes (Fluxo Lógico)
+Para realizar os testes do CRUD sem violar as restrições de integridade e chaves estrangeiras (Foreign Keys), siga rigorosamente esta sequência de criação:
+
+Cinema: Crie um Cinema (módulo independente).
+
+Filme e Sala: Crie um Filme e uma Sala (módulos independentes).
+
+Sessão: Crie a Sessão informando obrigatoriamente os IDs válidos de cinemaId, filmeId e salaId gerados anteriormente.
+
+Lanches e Ingressos: Crie os Lanches (independente) e os Ingressos (vinculados ao ID da Sessão).
+
+Pedido: Por último, crie o Pedido unindo o ID do Ingresso e do Lanche.
+
+🔌 Documentação dos Endpoints (Postman / Insomnia)
+Abaixo estão mapeados os principais endpoints e os formatos de corpos de requisição (JSON) validados para testes.
+
+🏢 Módulo de Cinema (/cinema)
+Listar Todos (GET): http://localhost:3001/cinema
+
+Buscar por ID (GET): http://localhost:3001/cinema/:id
+
+Criar Registro (POST): http://localhost:3001/cinema
+
+JSON
+{
+  "nome": "Cine Goiânia Shopping",
+  "endereco": "Av. T-10, Setor Bueno"
+}
+Atualizar Registro (PATCH): http://localhost:3001/cinema/:id
+
+JSON
+{
+  "nome": "Cine Goiânia Shopping 2"
+}
+Excluir Registro (DELETE): http://localhost:3001/cinema/:id
+
+🎬 Módulo de Filme (/filme)
+Criar Registro (POST): http://localhost:3001/filme
+
+JSON
+{
+  "titulo": "Interestelar",
+  "diretor": "Christopher Nolan",
+  "duracao": 169,
+  "genero": "Ficção Científica"
+}
+🪑 Módulo de Sala (/sala)
+Criar Registro (POST): http://localhost:3001/sala
+
+JSON
+{
+  "capacidade": 150,
+  "tipoTela": "IMAX"
+}
+⏰ Módulo de Sessão (/sessao)
+Criar Registro (POST): http://localhost:3001/sessao
+(Nota: O campo dataHora segue o padrão estrito ISO 8601)
+
+JSON
+{
+  "dataHora": "2026-06-07T21:00:00.000Z",
+  "cinemaId": 2,
+  "filmeId": 1,
+  "salaId": 1
+}
+👥 Autores
+Pedro Lucas Ramos
+
+Samyr Silva - LinkedIn
+
+🔗 Repositório
+https://github.com/Samyr-Dev/POO3_P2-Projeto_Cinema
+
+📄 Licença
+Este projeto está sob a licença MIT.
+4. Execução do programa:
+npm run start:dev
+
+Execução do prisma:
+npx prisma studio --url file:./prisma/dev.db
+
+🗺️ A Ordem Correta dos Testes (Fluxo Lógico)
+Para testar o seu CRUD sem tomar erro de chave estrangeira (Foreign Key), siga esta sequência:
+
+Primeiro: Crie um Cinema (ele é independente).
+
+Segundo: Crie um Filme e uma Sala (também são independentes).
+
+Terceiro: Crie a Sessão (passando o cinemaId, filmeId e salaId que você acabou de gerar nos passos anteriores).
+
+Quarto: Crie os Lanches (independente) e os Ingressos (vinculados à Sessão).
+
+Por último: Crie o Pedido (unindo o Ingresso e o Lanche).
+5. Exportar do repositório: https://github.com/Samyr-Dev/POO3_P2-Projeto_Cinema
+6. Nada
+7. https://github.com/nestjs/nest/blob/master/LICENSE
+8. Pedro Lucas e Samyr Silva

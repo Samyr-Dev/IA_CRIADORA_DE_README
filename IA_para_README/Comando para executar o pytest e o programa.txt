@@ -1,7 +1,8 @@
 C:\Users\samyr\OneDrive\Documentos\Projetos Programação\IA_Readme\IA_para_README\assistente-complexo\venv\Scripts\Activate.ps1
 
+cd IA_para_README\assistente-complexo
+
 ..\venv\Scripts\Activate.ps1  
 
 python .\consulta_contexto.py
 
-cd IA_para_README\assistente-complexo

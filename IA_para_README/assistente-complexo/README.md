@@ -1,50 +1,41 @@
-# Web01 (My_Life)
+# Projeto Cinema
 
-O projeto Web01, hospedado no repositório My_Life, foi desenvolvido com o intuito de estudo e aprendizado básico de HTML. A página é estruturada para apresentar informações sobre minha vida pessoal e profissional, servindo como uma introdução prática ao desenvolvimento web.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/nestjs/nest/blob/master/LICENSE)
 
-A página está dividida em 4 tópicos principais:
-*   Visão Geral
-*   Vida Pessoal
-*   Vida Profissional
-*   Resumo Geral e Contato
+Este projeto consiste no desenvolvimento e teste do CRUD de um sistema de cinema, abrangendo os módulos de cinema, filme, salas, sessões, lanches, ingressos e pedidos.
 
-## 🚀 Funcionalidades e Elementos
-O projeto foca na apresentação de conteúdo através de elementos fundamentais do HTML, incluindo:
-*   Títulos e Parágrafos
-*   Links e Imagens
-*   Tabelas
-*   Listas
-*   Estilização básica de cores
+## 🛠️ Tecnologias
+* TypeScript
+* Prisma
 
-## 🛠 Tecnologias Utilizadas
-*   **HTML:** Estruturação do conteúdo.
-*   **CSS:** Estilização aplicada diretamente no arquivo HTML.
-*   **VS Code Copilot:** Auxílio no desenvolvimento do código.
+## 🚀 Execução do Projeto
 
-## 📋 Pré-requisitos
-Para visualizar e editar o projeto, você precisará de:
-*   Editor de código (recomendado: VS Code).
-*   Extensão **Live Preview** ou **Live Server** para visualização em tempo real.
-*   Um navegador de sua preferência.
-
-## 🔧 Instalação e Configuração
-1. Clone o repositório:
+Para iniciar o servidor de desenvolvimento:
 bash
-git clone https://github.com/Samyr-Dev/My_life
+npm run start:dev
 
-2. Certifique-se de ter as extensões mencionadas instaladas no seu VS Code.
 
-## 💻 Como Executar
-1. Localize o arquivo `index.html` na pasta do projeto.
-2. Clique com o botão direito sobre o arquivo.
-3. Selecione a opção **"Open with Live Server"** (ou similar da extensão instalada).
-4. O site será aberto automaticamente no seu navegador padrão.
+Para visualizar o banco de dados através do Prisma Studio:
+bash
+npx prisma studio --url file:./prisma/dev.db
 
-## 🤝 Contribuição
-No momento, o repositório não está aberto para contribuições externas.
+
+## 🗺️ Ordem Correta dos Testes (Fluxo Lógico)
+
+Para realizar os testes do CRUD sem erros de chave estrangeira (Foreign Key), siga rigorosamente esta sequência:
+
+1.  **Cinema**: Crie um Cinema (módulo independente).
+2.  **Filme e Sala**: Crie um Filme e uma Sala (também são independentes).
+3.  **Sessão**: Crie a Sessão informando o `cinemaId`, `filmeId` e `salaId` gerados nos passos anteriores.
+4.  **Lanches e Ingressos**: Crie os Lanches (independente) e os Ingressos (vinculados à Sessão).
+5.  **Pedido**: Por último, crie o Pedido unindo o Ingresso e o Lanche.
+
+## 👥 Autores
+* Pedro Lucas
+* Samyr Silva - [LinkedIn](https://www.linkedin.com/in/samyrtertuliano)
+
+## 🔗 Repositório
+[https://github.com/Samyr-Dev/POO3_P2-Projeto_Cinema](https://github.com/Samyr-Dev/POO3_P2-Projeto_Cinema)
 
 ## 📄 Licença
-Este projeto está sob a licença MIT. Para mais detalhes, consulte o arquivo de [LICENSE](https://github.com/Samyr-Dev/My_life/blob/main/LICENSE).
-
-## 👤 Contato
-Samyr Tertuliano - [LinkedIn](https://www.linkedin.com/in/samyrtertuliano)
+Este projeto está sob a licença descrita em: [NestJS License](https://github.com/nestjs/nest/blob/master/LICENSE)

@@ -5,7 +5,7 @@ from google import genai
 from google.genai import types
 
 # ============== CONFIG ==============
-GEMINI_API_KEY = "GERE_SEU_TOKEN_NO_SITE_DO_GEMINI_E_COLE_AQUI"
+GEMINI_API_KEY = "AIzaSyDyo9jnf38bF2AnBuQPSb9z8R4ggoWrhPQ"
 UPLOADED_JSON = "uploaded_files.json"
 ARQUIVO_RESPOSTAS = "projeto.txt"
 ARQUIVO_FINAL = "README.md"

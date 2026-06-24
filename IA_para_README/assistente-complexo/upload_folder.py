@@ -11,7 +11,7 @@ import mimetypes
 
 # ============== CONFIG ==================
 # Insira sua chave da API aqui
-GEMINI_API_KEY = "SUA_CHAVE_DE_API_AQUI"
+GEMINI_API_KEY = "AIzaSyDyo9jnf38bF2AnBuQPSb9z8R4ggoWrhPQ"
 UPLOAD_DIR = "docs"                 # pasta com seus arquivos
 OUTPUT_JSON = "uploaded_files.json"  # onde salvar IDs/URIs
 DISPLAY_NAME_PREFIX = "README-"    # prefixo opcional
